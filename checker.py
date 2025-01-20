@@ -8,7 +8,7 @@ def get_all_commits(git_path):
     commits = dict()
 
     repo = Repo(git_path)
-    # get commit hash with date
+
     for commit in repo.iter_commits():
         commits[commit.hexsha] = commit.committed_datetime
 
