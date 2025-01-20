@@ -5,4 +5,6 @@ The calendar must be a .xlsx file.
 
 # Usage:
 
+_Run `make install ` to set up the project._
+
 `python rncp_validator/checker.py <calendar.xlsx> <git_dir>`
