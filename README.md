@@ -5,4 +5,4 @@ The calendar must be a .xlsx file.
 
 # Usage:
 
-`python rncp_validator <calendar.xlsx> <git_dir>`
+`python rncp_validator/checker.py <calendar.xlsx> <git_dir>`
