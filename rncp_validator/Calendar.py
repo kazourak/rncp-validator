@@ -4,6 +4,8 @@ Simple class to convert a xlsx as a usable object.
 
 from datetime import datetime, timedelta
 
+from openpyxl import workbook
+
 from rncp_validator.SchoolPeriod import SchoolPeriod
 
 MONTH_TO_NB = {
@@ -38,10 +40,10 @@ class Calendar:
     Simple class to convert a xlsx as a usable object.
     """
 
-    def __init__(self, calendar_file):
+    def __init__(self, calendar_file: workbook):
         """
         Build the class object.
-        :param calendar_file: Path of the calendar file as xlsx.
+        :param calendar_file: The calendar as a workbook object.
         """
         self.calendar = calendar_file
         self.periods = []
