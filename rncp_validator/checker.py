@@ -19,7 +19,7 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
 
     repo = Repo(git_path)
 
-    if branch not in repo.branches:
+    if branch and branch not in repo.branches:
         raise ValueError(
             f"Branch '{branch}' does not exist in the repository."
             + f" Possible choice {[branch.name for branch in repo.branches]}"
@@ -53,9 +53,21 @@ def main():
 
         for commits in commit_list:
             if cl.date_in_period(commit_list[commits]):
-                print("\033[92m" + "Commit", commits, "is in a school period" + "\033[0m")
+                print(
+                    "\033[92m" + "Commit",
+                    commits,
+                    "at",
+                    commit_list[commits],
+                    "is in a school period" + "\033[0m",
+                )
             else:
-                print("\033[91m" + "Commit", commits, "is not in a school period" + "\033[0m")
+                print(
+                    "\033[91m" + "Commit",
+                    commits,
+                    "at",
+                    commit_list[commits],
+                    "is not in a school period" + "\033[0m",
+                )
     except Exception as e:
         raise ValueError("{Find an error}") from e
 
