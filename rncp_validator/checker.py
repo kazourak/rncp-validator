@@ -113,7 +113,7 @@ def main():
 
         xlsx_paths = get_calendars(args.calendar_path, args.not_recursive)
 
-        for xlsx_path, git_path in itertools.product(xlsx_paths, args.git_parse):
+        for xlsx_path, git_path in itertools.product(xlsx_paths, args.git_paths):
             analyse(xlsx_path, git_path, args.branch)
 
     except Exception as e:
