@@ -101,7 +101,7 @@ def main():
         parser.add_argument(
             "calendar_path", type=str, help="Path to the calendar file or directory"
         )
-        parser.add_argument("git_parse", type=str, nargs="+", help="Git parse argument")
+        parser.add_argument("git_paths", type=str, nargs="+", help="Git paths arguments")
         parser.add_argument("--branch", type=str, default=None, help="Branch to check")
         parser.add_argument(
             "--not_recursive",
