@@ -2,6 +2,7 @@
 
 import argparse
 import glob
+import itertools
 import os
 
 from git import Repo
@@ -33,10 +34,16 @@ def analyse(calendar_path: str, git_path: str, branch: str = None):
     :param branch: The branch to check.
     :return: None
     """
+
+    print("---------------------------------------")
+    print("\033[1m" + f"Working on {calendar_path} with {git_path}" + "\033[0m")
+
     cl = Calendar(load_workbook(calendar_path))
     cl.get_periods()
 
     commit_list = get_all_commits(git_path, branch=branch)
+
+    print("---------------------------------------")
 
     for commits in commit_list:
         if cl.date_in_period(commit_list[commits]):
@@ -73,7 +80,11 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
             f"Branch '{branch}' does not exist in the repository."
             + f" Possible choice {[branch.name for branch in repo.branches]}"
         )
-    print(f"Working on all commits from {repo.active_branch.name if not branch else branch}...")
+    print(
+        "\033[1m"
+        + f"Working on all commits from {repo.active_branch.name if not branch else branch}..."
+        + "\033[0m"
+    )
 
     for commit in repo.iter_commits(repo.active_branch.name if not branch else branch):
         commits[commit.hexsha] = commit.committed_datetime
@@ -84,15 +95,13 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
 def main():
     """
     Main program.
-    :return:
-    :rtype:
     """
     try:
         parser = argparse.ArgumentParser(description="Process calendar and git parse arguments.")
         parser.add_argument(
             "calendar_path", type=str, help="Path to the calendar file or directory"
         )
-        parser.add_argument("git_parse", type=str, help="Git parse argument")
+        parser.add_argument("git_parse", type=str, nargs="+", help="Git parse argument")
         parser.add_argument("--branch", type=str, default=None, help="Branch to check")
         parser.add_argument(
             "--not_recursive",
@@ -104,8 +113,8 @@ def main():
 
         xlsx_paths = get_calendars(args.calendar_path, args.not_recursive)
 
-        for xlsx_path in xlsx_paths:
-            analyse(xlsx_path, args.git_parse, args.branch)
+        for xlsx_path, git_path in itertools.product(xlsx_paths, args.git_parse):
+            analyse(xlsx_path, git_path, args.branch)
 
     except Exception as e:
         raise ValueError("{Find an error}") from e
