@@ -92,7 +92,8 @@ options:
 
 We would like to express our gratitude to the following developers who have contributed to the RNCP Validator project:
 
-![kazourak's avatar](https://github.com/kazourak.png&s=30) ![farinaleo's avatar](https://avatars.githubusercontent.com/u/46383251?v=4&s=30) 
+![kazourak's avatar](https://avatars.githubusercontent.com/u/109950841?v=4&s=30) ![farinaleo's avatar](https://avatars.githubusercontent.com/u/46383251?v=4&s=30) 
+
 ## 🛠️ Makefile Commands
 
 - **`make install`**: Install the project.
