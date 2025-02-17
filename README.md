@@ -12,17 +12,18 @@ You can download the calendar by clicking on the "Télécharger le calendrier" b
 
 1. **Install the Project**
 
-   Run the following command to set up the project:
+   You can install the project directly from the main branch of the GitHub repository using the following command:
 
    ```sh
-   make install
+   pip install git+https://github.com/kazourak/rncp-validator.git
    ```
 
-   If the installation is successful, you will see a message like this:
+   To install a specific tagged version, use:
 
    ```sh
-   ✔ Project installed successfully! ✨
+   pip install git+https://github.com/kazourak/rncp-validator.git@<tag_version>
    ```
+
 
 2. **Run the Validator**
 
