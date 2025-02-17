@@ -2,37 +2,12 @@
 Simple class to convert a xlsx as a usable object.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 
 from openpyxl import workbook
 
 from rncp_validator.SchoolPeriod import SchoolPeriod
-
-MONTH_TO_NB = {
-    "Janvier": "01",
-    "Février": "02",
-    "Mars": "03",
-    "Avril": "04",
-    "Mai": "05",
-    "Juin": "06",
-    "Juillet": "07",
-    "Août": "08",
-    "Septembre": "09",
-    "Octobre": "10",
-    "Novembre": "11",
-    "Décembre": "12",
-}
-
-
-def to_date(month_str: str, day_str: str, year_str: str) -> datetime:
-    """
-    Convert the given arguments, month, day and year into a datetime object.
-    :param month_str: The mount number as a string.
-    :param day_str: The day number as a string.
-    :param year_str: The year as a string.
-    :return: The datetime object.
-    """
-    return datetime(int(year_str), int(month_str), int(day_str))
+from rncp_validator.tools import MONTH_TO_NB, to_date
 
 
 class Calendar:
@@ -96,3 +71,24 @@ class Calendar:
             if period.in_date_range(date_to_compare):
                 return True
         return False
+
+    def nearest_date(self, target_date: datetime) -> datetime:
+        """
+        Find the nearest SchoolPeriod to a given date.
+
+        :param target_date: The target date to compare.
+        :return: The nearest SchoolPeriod object.
+        """
+        nearest_period = min(
+            self.periods,
+            key=lambda period: min(
+                abs((period.start - target_date).days), abs((period.end - target_date).days)
+            ),
+        )
+
+        closest_date = min(
+            nearest_period.start, nearest_period.end, key=lambda d: abs((d - target_date).days)
+        )
+
+        # Convert it to a datetime with the time set to 10 AM
+        return datetime.combine(closest_date, time(10, 0))
