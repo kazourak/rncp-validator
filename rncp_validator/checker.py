@@ -4,6 +4,8 @@ import argparse
 import glob
 import itertools
 import os
+import shutil
+import uuid
 
 from git import Repo
 from openpyxl import load_workbook
@@ -45,23 +47,39 @@ def analyse(calendar_path: str, git_path: str, branch: str = None):
 
     print("---------------------------------------")
 
-    for commits in commit_list:
-        if cl.date_in_period(commit_list[commits]):
+    for commit, (date, author) in commit_list.items():
+        if cl.date_in_period(date):
             print(
                 "\033[92m" + "Commit",
-                commits,
+                commit,
+                "by",
+                author,
                 "at",
-                commit_list[commits],
+                date,
                 "is in a school period" + "\033[0m",
             )
         else:
             print(
                 "\033[91m" + "Commit",
-                commits,
+                commit,
+                "by",
+                author,
                 "at",
-                commit_list[commits],
+                date,
                 "is not in a school period" + "\033[0m",
             )
+
+
+def clone_repo(repo_url: str, clone_path: str) -> Repo:
+    """
+    Clone a repository from a given URL to a specified local path.
+    :param repo_url: The URL of the repository to clone.
+    :param clone_path: The local path where the repository should be cloned.
+    :return: The cloned repository as a Repo object.
+    """
+    if not os.path.exists(clone_path):
+        os.makedirs(clone_path)
+    return Repo.clone_from(repo_url, clone_path)
 
 
 def get_all_commits(git_path: str, branch: str = None) -> dict:
@@ -69,11 +87,18 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
     Get from the given git path all the commits from the head.
     :param git_path: The .git path.
     :param branch: The branch to check.
-    :return: All commits as a dict the hexa as key and the date as value.
+    :return: All commits as a dict with the hexa as key and a tuple (date, author) as value.
     """
     commits = dict()
 
-    repo = Repo(git_path)
+    if (
+        git_path.startswith("https://")
+        or git_path.startswith("http://")
+        or git_path.startswith("git@")
+    ):
+        repo = clone_repo(git_path, "/tmp/rncp-validator/" + str(uuid.uuid4()))
+    else:
+        repo = Repo(git_path)
 
     if branch and branch not in repo.branches:
         raise ValueError(
@@ -87,7 +112,7 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
     )
 
     for commit in repo.iter_commits(repo.active_branch.name if not branch else branch):
-        commits[commit.hexsha] = commit.committed_datetime
+        commits[commit.hexsha] = (commit.committed_datetime, commit.author.name)
 
     return commits
 
@@ -113,8 +138,11 @@ def main():
 
         xlsx_paths = get_calendars(args.calendar_path, args.not_recursive)
 
-        for xlsx_path, git_path in itertools.product(xlsx_paths, args.git_parse):
+        for xlsx_path, git_path in itertools.product(xlsx_paths, args.git_paths):
             analyse(xlsx_path, git_path, args.branch)
+
+        if os.path.exists("/tmp/rncp-validator"):
+            shutil.rmtree("/tmp/rncp-validator")
 
     except Exception as e:
         raise ValueError("{Find an error}") from e
