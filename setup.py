@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from os.path import exists
 
 setup(
-    name="rncp-validator",
+    name="rncp_validator",
     version="0.1.0",
     packages=find_packages(),
     install_requires=[
@@ -18,7 +18,7 @@ setup(
         ],
     },
     author="nskiba & leofarina",
-    author_email="nskiba@student.42angouleme.fr",
+    author_email="nskiba@student.42angouleme.fr & lfarina@student.42angouleme.fr",
     description="Validateur des commits RNCP",
     long_description=open("README.md").read() if exists("README.md") else "",
     long_description_content_type="text/markdown",

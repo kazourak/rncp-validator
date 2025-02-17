@@ -1,19 +1,78 @@
-# How can I get the calendar ?
+# RNCP Validator ✨
 
-You can get the calendar by clicking on the "Télécharger le calendrier" button in the "Calendrier" at https://cfa.42.fr/students/calendars.
-The calendar must be a .xlsx file.
+Welcome to the RNCP Validator project! This tool helps you identify commits made outside of school hours by comparing them with a provided calendar.
 
-# Usage:
+## 📅 How to Get the Calendar
 
-_Run `make install ` to set up the project._
+You can download the calendar by clicking on the "Télécharger le calendrier" button in the "Calendrier" section at [CFA 42](https://cfa.42.fr/students/calendars). The calendar must be a `.xlsx` file.
 
-`python rncp_validator/checker.py <calendar.xlsx or dir> <list of .git path>`
+## 🔧 Basic Usage
 
-_If you give to the script a directory of calendars, the program will analyse each xlsx files._
+### For Customers
 
-_You can also give to the script multiple .git paths to analyse all at once._
+1. **Install the Project**
 
-```shell
+   Run the following command to set up the project:
+
+   ```sh
+   make install
+   ```
+
+   If the installation is successful, you will see a message like this:
+
+   ```sh
+   ✔ Project installed successfully! ✨
+   ```
+
+2. **Run the Validator**
+
+   Use the following command to analyze your calendar and Git repositories:
+
+   ```sh
+   rncp_validator <calendar.xlsx or dir> <list of .git paths>
+   ```
+
+   - **Example**: `rncp_validator path/to/calendar.xlsx path/to/.git`
+
+   - **Directory of Calendars**: If you provide a directory, the program will analyze each `.xlsx` file within it.
+
+   - **Multiple Git Paths**: You can provide multiple Git paths to analyze them all at once.
+
+### For Developers
+
+1. **Set Up the Environment**
+
+   Create a virtual environment and install the requirements:
+
+   ```sh
+   make create_env
+   source .venv/bin/activate
+   make req
+   ```
+
+2. **Lint and Format the Code**
+
+   Ensure your code adheres to style guidelines:
+
+   ```sh
+   make lint
+   make format
+   ```
+
+3. **Run the Validator**
+
+   You can run the validator with additional options:
+
+   ```sh
+   python rncp_validator/checker.py <calendar.xlsx or dir> <list of .git paths> --branch <branch_name> --not_recursive
+   ```
+
+   - **`--branch <branch_name>`**: Specify the branch to check.
+   - **`--not_recursive`**: Do not explore the directory recursively.
+
+## 📜 Command Reference
+
+```sh
 usage: checker.py [-h] [--branch BRANCH] [--not_recursive] calendar_path git_paths [git_paths ...]
 
 Process calendar and git parse arguments.
@@ -27,3 +86,13 @@ options:
   --branch BRANCH  Branch to check
   --not_recursive  Do not explore the directory recursively.
 ```
+
+## 🛠️ Makefile Commands
+
+- **`make install`**: Install the project.
+- **`make create_env`**: Create a virtual environment.
+- **`make req`**: Install requirements.
+- **`make lint`**: Lint the code using `flake8` and `black`.
+- **`make format`**: Format the code using `black`.
+
+---
