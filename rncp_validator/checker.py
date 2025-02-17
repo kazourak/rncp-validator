@@ -4,8 +4,8 @@ import argparse
 import glob
 import itertools
 import os
-import uuid
 import shutil
+import uuid
 
 from git import Repo
 from openpyxl import load_workbook
@@ -57,7 +57,7 @@ def analyse(calendar_path: str, git_path: str, branch: str = None):
                 "at",
                 date,
                 "is in a school period" + "\033[0m",
-                )
+            )
         else:
             print(
                 "\033[91m" + "Commit",
@@ -67,7 +67,7 @@ def analyse(calendar_path: str, git_path: str, branch: str = None):
                 "at",
                 date,
                 "is not in a school period" + "\033[0m",
-                )
+            )
 
 
 def clone_repo(repo_url: str, clone_path: str) -> Repo:
@@ -91,7 +91,11 @@ def get_all_commits(git_path: str, branch: str = None) -> dict:
     """
     commits = dict()
 
-    if git_path.startswith("https://") or git_path.startswith("http://") or git_path.startswith("git@"):
+    if (
+        git_path.startswith("https://")
+        or git_path.startswith("http://")
+        or git_path.startswith("git@")
+    ):
         repo = clone_repo(git_path, "/tmp/rncp-validator/" + str(uuid.uuid4()))
     else:
         repo = Repo(git_path)

@@ -12,7 +12,7 @@ install:
 
 .PHONY: lint
 lint: ## Lint using flake8 and black
-	flake8 ${PROJECT_NAME} --disable-noqa --max-line-length 99
+	flake8 ${PROJECT_NAME} --max-line-length 99
 	isort --check --diff --profile black ${PROJECT_NAME}
 	black --check ${PROJECT_NAME} --line-length 99
 
